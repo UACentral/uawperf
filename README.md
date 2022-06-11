@@ -18,6 +18,7 @@ mkdir build
 cd build
 cmake -DBUILD_SHARED_LIBS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DUA_NAMESPACE_ZERO=FULL -DUA_ENABLE_AMALGAMATION=ON .. -G "Visual Studio 17 2022" -A x64
 ```
+Open open62541.sln and build  
 ### Initial setup
 ```
 cd ~
