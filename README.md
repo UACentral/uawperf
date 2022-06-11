@@ -26,3 +26,4 @@ mkdir prj
 cd prj
 git clone https://github.com/UACentral/uawperf.git
 ```
+Open src/uawperf/uawperf.sln
