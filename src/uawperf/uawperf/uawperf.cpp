@@ -28,11 +28,13 @@ writeCurrentTime(UA_Server* server,
 static void
 addCurrentTimeDataSourceVariable(UA_Server* server) {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
-    attr.displayName = UA_LOCALIZEDTEXT((char*)"en-US", (char*)"Current time - data source");
+    char nameLocalized[27] = "Current time - data source";
+    char name[24] = "current-time-datasource";
+    attr.displayName = UA_LOCALIZEDTEXT((char*)"en-US", nameLocalized);
     attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
 
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, (char*)"current-time-datasource");
-    UA_QualifiedName currentName = UA_QUALIFIEDNAME(1, (char*)"current-time-datasource");
+    UA_NodeId currentNodeId = UA_NODEID_STRING(1, name);
+    UA_QualifiedName currentName = UA_QUALIFIEDNAME(1, name);
     UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
     UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
     UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
@@ -58,25 +60,6 @@ int main() {
 
     UA_Server* server = UA_Server_new();
     UA_ServerConfig_setDefault(UA_Server_getConfig(server));
-
-    // add a variable node to the adresspace
-    UA_VariableAttributes attr = UA_VariableAttributes_default;
-    UA_Int32 myInteger = 42;
-    UA_Variant_setScalarCopy(&attr.value, &myInteger, &UA_TYPES[UA_TYPES_INT32]);
-    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
-    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
-    UA_NodeId myIntegerNodeId = UA_NODEID_STRING_ALLOC(1, "the.answer");
-    UA_QualifiedName myIntegerName = UA_QUALIFIEDNAME_ALLOC(1, "the answer");
-    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
-    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
-    UA_Server_addVariableNode(server, myIntegerNodeId, parentNodeId,
-        parentReferenceNodeId, myIntegerName,
-        UA_NODEID_NULL, attr, NULL, NULL);
-
-    /* allocations on the heap need to be freed */
-    UA_VariableAttributes_clear(&attr);
-    UA_NodeId_clear(&myIntegerNodeId);
-    UA_QualifiedName_clear(&myIntegerName);
 
     addCurrentTimeDataSourceVariable(server);
 
