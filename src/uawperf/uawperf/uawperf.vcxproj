@@ -137,7 +137,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CpuUsage.cpp" />
     <ClCompile Include="uawperf.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CpuUsage.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

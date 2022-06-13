@@ -1,6 +1,9 @@
 //#include <iostream>
 #include <signal.h>
 #include "open62541.h"
+#include "CpuUsage.h"
+
+CpuUsage cpu;
 
 static UA_StatusCode
 readCurrentValue(UA_Server* server,
@@ -8,9 +11,9 @@ readCurrentValue(UA_Server* server,
     const UA_NodeId* nodeId, void* nodeContext,
     UA_Boolean sourceTimeStamp, const UA_NumericRange* range,
     UA_DataValue* dataValue) {
-    UA_DateTime now = UA_DateTime_now();
-    UA_Variant_setScalarCopy(&dataValue->value, &now,
-        &UA_TYPES[UA_TYPES_DATETIME]);
+    UA_Double cpuCurrent = cpu.getCurrentValue();
+    UA_Variant_setScalarCopy(&dataValue->value, &cpuCurrent,
+        &UA_TYPES[UA_TYPES_DOUBLE]);
     dataValue->hasValue = true;
     return UA_STATUSCODE_GOOD;
 }
@@ -39,13 +42,13 @@ addCpuUsageDataSourceVariable(UA_Server* server) {
     UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
     UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
 
-    UA_DataSource timeDataSource;
-    timeDataSource.read = readCurrentValue;
-    timeDataSource.write = writeCurrentValue;
+    UA_DataSource cpuDataSource;
+    cpuDataSource.read = readCurrentValue;
+    cpuDataSource.write = writeCurrentValue;
     UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
         parentReferenceNodeId, currentName,
         variableTypeNodeId, attr,
-        timeDataSource, NULL, NULL);
+        cpuDataSource, NULL, NULL);
 }
 
 static volatile UA_Boolean running = true;
@@ -53,6 +56,8 @@ static void stopHandler(int sig) {
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "received ctrl-c");
     running = false;
 }
+
+
 
 int main() {
     signal(SIGINT, stopHandler);
