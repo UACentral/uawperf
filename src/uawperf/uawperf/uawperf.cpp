@@ -3,7 +3,7 @@
 #include "open62541.h"
 
 static UA_StatusCode
-readCurrentTime(UA_Server* server,
+readCurrentValue(UA_Server* server,
     const UA_NodeId* sessionId, void* sessionContext,
     const UA_NodeId* nodeId, void* nodeContext,
     UA_Boolean sourceTimeStamp, const UA_NumericRange* range,
@@ -16,7 +16,7 @@ readCurrentTime(UA_Server* server,
 }
 
 static UA_StatusCode
-writeCurrentTime(UA_Server* server,
+writeCurrentValue(UA_Server* server,
     const UA_NodeId* sessionId, void* sessionContext,
     const UA_NodeId* nodeId, void* nodeContext,
     const UA_NumericRange* range, const UA_DataValue* data) {
@@ -26,10 +26,10 @@ writeCurrentTime(UA_Server* server,
 }
 
 static void
-addCurrentTimeDataSourceVariable(UA_Server* server) {
+addCpuUsageDataSourceVariable(UA_Server* server) {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
-    char nameLocalized[27] = "Current time - data source";
-    char name[24] = "current-time-datasource";
+    char nameLocalized[36] = "\\Processor(_Total)\\% Processor Time";
+    char name[36] = "\\Processor(_Total)\\% Processor Time";
     attr.displayName = UA_LOCALIZEDTEXT((char*)"en-US", nameLocalized);
     attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
 
@@ -40,8 +40,8 @@ addCurrentTimeDataSourceVariable(UA_Server* server) {
     UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
 
     UA_DataSource timeDataSource;
-    timeDataSource.read = readCurrentTime;
-    timeDataSource.write = writeCurrentTime;
+    timeDataSource.read = readCurrentValue;
+    timeDataSource.write = writeCurrentValue;
     UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
         parentReferenceNodeId, currentName,
         variableTypeNodeId, attr,
@@ -61,7 +61,7 @@ int main() {
     UA_Server* server = UA_Server_new();
     UA_ServerConfig_setDefault(UA_Server_getConfig(server));
 
-    addCurrentTimeDataSourceVariable(server);
+    addCpuUsageDataSourceVariable(server);
 
     UA_StatusCode retval = UA_Server_run(server, &running);
 
