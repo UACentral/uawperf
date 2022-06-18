@@ -18,23 +18,13 @@ readCurrentValue(UA_Server* server,
     return UA_STATUSCODE_GOOD;
 }
 
-static UA_StatusCode
-writeCurrentValue(UA_Server* server,
-    const UA_NodeId* sessionId, void* sessionContext,
-    const UA_NodeId* nodeId, void* nodeContext,
-    const UA_NumericRange* range, const UA_DataValue* data) {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-        "Changing the system time is not implemented");
-    return UA_STATUSCODE_BADINTERNALERROR;
-}
-
 static void
 addCpuUsageDataSourceVariable(UA_Server* server) {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     char nameLocalized[36] = "\\Processor(_Total)\\% Processor Time";
     char name[36] = "\\Processor(_Total)\\% Processor Time";
     attr.displayName = UA_LOCALIZEDTEXT((char*)"en-US", nameLocalized);
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
+    attr.accessLevel = UA_ACCESSLEVELMASK_READ;
 
     UA_NodeId currentNodeId = UA_NODEID_STRING(1, name);
     UA_QualifiedName currentName = UA_QUALIFIEDNAME(1, name);
@@ -44,7 +34,6 @@ addCpuUsageDataSourceVariable(UA_Server* server) {
 
     UA_DataSource cpuDataSource;
     cpuDataSource.read = readCurrentValue;
-    cpuDataSource.write = writeCurrentValue;
     UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
         parentReferenceNodeId, currentName,
         variableTypeNodeId, attr,
