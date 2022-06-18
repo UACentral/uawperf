@@ -138,10 +138,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CpuUsage.cpp" />
+    <ClCompile Include="MemoryInfo.cpp" />
     <ClCompile Include="uawperf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CpuUsage.h" />
+    <ClInclude Include="MemoryInfo.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
