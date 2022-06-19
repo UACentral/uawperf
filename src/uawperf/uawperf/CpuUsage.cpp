@@ -57,7 +57,6 @@ CpuUsage cpu;
 
 static
 UA_StatusCode
-//CpuUsage::
 readCurrentValue(UA_Server* server,
     const UA_NodeId* sessionId, void* sessionContext,
     const UA_NodeId* nodeId, void* nodeContext,
@@ -71,7 +70,6 @@ readCurrentValue(UA_Server* server,
 }
 
 void
-//CpuUsage::
 addCpuUsageDataSourceVariable(UA_Server* server) 
 {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
@@ -86,7 +84,6 @@ addCpuUsageDataSourceVariable(UA_Server* server)
     UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
     UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
 
-    //auto cb = std::bind(&CpuUsage::readCurrentValue, CpuUsage());
     UA_DataSource cpuDataSource;
     cpuDataSource.read = &readCurrentValue;
     UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
