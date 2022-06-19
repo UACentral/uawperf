@@ -32,8 +32,8 @@ readMemoryPercentUsage(UA_Server* server,
 void
 addMemoryPercentUsageDataSourceVariable(UA_Server* server) {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
-    char nameLocalized[36] = "\\Memory(_Total)\\% Usage";
-    char name[36] = "\\Memory(_Total)\\% Usage";
+    char nameLocalized[24] = "\\Memory(_Total)\\% Usage";
+    char name[24] = "\\Memory(_Total)\\% Usage";
     attr.displayName = UA_LOCALIZEDTEXT((char*)"en-US", nameLocalized);
     attr.accessLevel = UA_ACCESSLEVELMASK_READ;
 
